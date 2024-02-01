@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "roaure"
+version = "0.0.1"
+authors = ["Greateapot <greateapot998@gmail.com>"]
+description = 'Router Auto Reboot'
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/Greateapot/roaure"
+repository = "https://github.com/Greateapot/roaure"
+classifiers = [
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.7",
+    "Typing :: Typed",
+]
+packages = [{ include = "roaure", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+certifi = "^2023.11.17"
+charset-normalizer = "^3.3.2"
+idna = "^3.6"
+requests = "^2.31.0"
+urllib3 = "^2.2.0"
+
+
+[tool.poetry.scripts]
+roaure = "roaure:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools", "wheel"]
+build-backend = "poetry.core.masonry.api"

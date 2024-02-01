@@ -1,0 +1,15 @@
+[Unit]
+Description=Router Auto Reboot
+After=network.target
+
+[Service]
+Type=simple
+OOMScoreAdjust=-100
+ExecStart=/usr/local/roaure/.venv/bin/roaure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%n
+LimitNOFILE=614400
+
+[Install]
+WantedBy=multi-user.target

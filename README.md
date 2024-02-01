@@ -1,0 +1,3 @@
+# Router Auto Reboot
+
+Script + service for rebooting router every N days/hours/etc...
