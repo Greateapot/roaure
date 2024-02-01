@@ -1,0 +1,10 @@
+[Unit]
+Description=roaure
+After=network.target
+
+[Timer]
+OnCalendar=04:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

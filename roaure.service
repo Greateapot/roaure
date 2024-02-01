@@ -3,7 +3,7 @@ Description=Router Auto Reboot
 After=network.target
 
 [Service]
-Type=simple
+Type=oneshot
 OOMScoreAdjust=-100
 ExecStart=/usr/local/roaure/.venv/bin/roaure
 StandardOutput=syslog
