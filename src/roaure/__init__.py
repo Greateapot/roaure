@@ -1,4 +1,3 @@
-import json
 import logging
 import re
 import sys
@@ -7,7 +6,7 @@ from requests import Session
 
 
 HOST = "http://192.168.10.1"
-HEADERS_FILENAME = "headers.json"
+AUTH_KEY = "Basic YWRtaW46YWRtaW4=" #  admin:admin (default password)
 REBOOT_MESSAGE = "The Broadband Router is rebooting."
 
 RESET_ROUTER_URL = f"{HOST}/resetrouter.html"
@@ -28,13 +27,6 @@ def prepare_logger() -> None:
     )
     handler.setFormatter(formatter)
     root.addHandler(handler)
-
-
-def headers() -> dict[str, str]:
-    with open(HEADERS_FILENAME) as file:
-        headers = json.load(file)
-        logging.debug(f"Headers loaded: {headers}")
-        return headers
 
 
 def get_session_key(session: Session) -> int:
@@ -58,7 +50,8 @@ def main() -> None:
     prepare_logger()
     logging.info("Starting router reboot...")
     with Session() as session:
-        session.headers = headers()
+        # Оказывается, достаточно только поля авторизации, кт еще и одинаковый при базовом логине:пароле "admin"
+        session.headers = {"Authorization": AUTH_KEY}
         session_key = get_session_key(session)
         result = reset_router(session, session_key)
         if result:
