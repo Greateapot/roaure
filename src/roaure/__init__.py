@@ -6,7 +6,7 @@ from requests import Session
 
 
 HOST = "http://192.168.10.1"
-AUTH_KEY = "Basic YWRtaW46YWRtaW4=" #  admin:admin (default password)
+AUTH_KEY = "Basic YWRtaW46YWRtaW4="  #  admin:admin (default password, encoded with base64)
 REBOOT_MESSAGE = "The Broadband Router is rebooting."
 
 RESET_ROUTER_URL = f"{HOST}/resetrouter.html"
@@ -50,7 +50,7 @@ def main() -> None:
     prepare_logger()
     logging.info("Starting router reboot...")
     with Session() as session:
-        # Оказывается, достаточно только поля авторизации, кт еще и одинаковый при базовом логине:пароле "admin"
+        # Оказывается, достаточно только поля авторизации, кт еще и одинаковый при базовом логине:пароле
         session.headers = {"Authorization": AUTH_KEY}
         session_key = get_session_key(session)
         result = reset_router(session, session_key)
