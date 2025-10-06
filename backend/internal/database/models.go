@@ -45,6 +45,9 @@ type Config struct {
 	// Информация о iperf3-сервере для замера скорости
 	Server Server `json:"server"`
 
+	// Информация о роутере и данные для входа в админ-панель
+	Router Router `json:"router"`
+
 	// Расписание временных окон
 	Schedules []Schedule `json:"schedules"`
 }
@@ -56,6 +59,18 @@ type Server struct {
 
 	// Порт
 	Port int `json:"port"`
+}
+
+// Хост и данные для входа в админ-панель роутера
+type Router struct {
+	// Хост
+	Host string `json:"host"`
+
+	// Имя пользователя
+	Username string `json:"username"`
+
+	// Пароль пользователя
+	Password string `json:"password"`
 }
 
 // Расписание временных окон, в течение которых можно перезагружать роутер
