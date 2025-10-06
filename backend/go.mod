@@ -2,9 +2,10 @@ module github.com/Greateapot/roaure
 
 go 1.24.4
 
+require github.com/BGrewell/go-iperf v0.0.0-20240522025150-6a2b45559210
+
 require (
 	github.com/BGrewell/go-conversions v0.0.0-20201203155646-5e189e4ca087 // indirect
-	github.com/BGrewell/go-iperf v0.0.0-20240522025150-6a2b45559210 // indirect
 	github.com/BGrewell/tail v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.1.2 // indirect

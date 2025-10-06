@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	if bps, err := speedtest.RunClient("localhost", 5201); err != nil {
+	c := speedtest.NewClient("localhost", 5201)
+
+	if bps, err := c.Start(); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Printf("Download speed: %s", database.DataSize(bps).String())
