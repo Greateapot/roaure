@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type DataSize uint64
+type DataSize float64
 
 const (
 	Bit   DataSize = 1
@@ -20,16 +20,14 @@ const (
 
 func (d DataSize) String() string {
 	switch {
-	case d >= GByte:
-		return fmt.Sprintf("%.2f GB", float64(d)/float64(GByte))
-	case d >= MByte:
-		return fmt.Sprintf("%.2f MB", float64(d)/float64(MByte))
-	case d >= KByte:
-		return fmt.Sprintf("%.2f KB", float64(d)/float64(KByte))
-	case d >= Byte:
-		return fmt.Sprintf("%.2f B", float64(d)/float64(Byte))
+	case d >= GBit:
+		return fmt.Sprintf("%.2f Gb", d/GBit)
+	case d >= MBit:
+		return fmt.Sprintf("%.2f Mb", d/MBit)
+	case d >= KBit:
+		return fmt.Sprintf("%.2f Kb", d/KBit)
 	default: // bits
-		return fmt.Sprintf("%d b", d)
+		return fmt.Sprintf("%.2f b", d/Bit)
 	}
 }
 
@@ -44,25 +42,37 @@ type Config struct {
 	// Кол-во подряд плохих замеров
 	BadCountLimit int32 `json:"badCountLimit"`
 
+	// Информация о iperf3-сервере для замера скорости
+	Server Server `json:"server"`
+
 	// Расписание временных окон
 	Schedules []Schedule `json:"schedules"`
 }
 
+// Хост/порт iperf3-сервера для замера скорости
+type Server struct {
+	// Хост
+	Host string `json:"host"`
+
+	// Порт
+	Port int `json:"port"`
+}
+
 // Расписание временных окон, в течение которых можно перезагружать роутер
 type Schedule struct {
-	// название расписания (удобнее, чем ID)
+	// Название расписания (удобнее, чем ID)
 	Title string `json:"title"`
 
-	// время начала окна (часы)
+	// Время начала окна (часы)
 	StartsAt Time `json:"starts_at"`
 
-	// время конца окна
+	// Время конца окна
 	EndsAt Time `json:"ends_at"`
 
-	// дни недели
+	// Дни недели
 	Weekdays []time.Weekday `json:"weekdays"`
 
-	// состояние (вкл/выкл)
+	// Состояние (вкл/выкл)
 	Enabled bool `json:"enabled"`
 }
 
