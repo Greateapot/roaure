@@ -57,26 +57,22 @@ func (m *Monitor) canRebootNow() bool {
 	hour := int8(now.Hour())
 	minute := int8(now.Minute())
 
-	for _, schedule := range m.Schedules {
-		switch {
-		case
-			!schedule.Enabled, // Расписание не активно
-			!slices.Contains(schedule.Weekdays, weekday),                          // Не сегодня
-			hour < schedule.StartsAt.Hours,                                        // Слишком рано в часах
-			hour == schedule.StartsAt.Hours && minute < schedule.StartsAt.Minutes, // Слишком рано в минутах
-			hour > schedule.EndsAt.Hours,                                          // Слишком поздно в часах
-			hour == schedule.EndsAt.Hours && minute > schedule.EndsAt.Minutes:     // Слишком поздно в минутах
-			continue
-		default: // Перезагружать роутер можно
-			return true
-		}
-	}
+	// Индекс первого расписания, удовлетворяющего условиям:
+	// включен, сегодня, после времени начала и до времени окончания
+	scheduleIndex := slices.IndexFunc(m.Schedules, func(schedule database.Schedule) bool {
+		return schedule.Enabled &&
+			slices.Contains(schedule.Weekdays, weekday) &&
+			hour >= schedule.StartsAt.Hours &&
+			minute >= schedule.StartsAt.Minutes &&
+			hour <= schedule.EndsAt.Hours &&
+			minute < schedule.EndsAt.Minutes
+	})
 
-	// Перезагружать роутер нельзя
-	return false
+	// Если расписание найдено - перезагружать роутер можно
+	return scheduleIndex != -1
 }
 
-func (m *Monitor) process() bool {
+func (m *Monitor) canReboot() bool {
 	// Замеряем скорость
 	if bps, err := m.SpeedtestClient.Start(); err != nil {
 		// Не удалось замерить скорость загрузки, выход
@@ -107,17 +103,21 @@ func (m *Monitor) process() bool {
 		return false
 	}
 
-	// Все условия выполнены, перезагружаем роутер
-	if err := m.RouterClient.Reboot(); err != nil {
-		// Не удалось перезагрузить роутер, выход
-		log.Println(err)
-		return false
-	}
-
-	// Успех
-	m.RebootRequired = false
-	m.BadCount = 0
+	// Все условия выполнены, можно перезагрузить роутер
 	return true
+}
+
+func (m *Monitor) reboot() {
+	if err := m.RouterClient.Reboot(); err != nil {
+		// Не удалось перезагрузить роутер
+		log.Println(err)
+	} else {
+		// Успех, обнуляемся и ждем загрузки роутера
+		m.RebootRequired = false
+		m.BadCount = 0
+		m.Stop()
+		m.DelayedStart(3 * time.Minute)
+	}
 }
 
 func (m *Monitor) wrapper(ctx context.Context) {
@@ -134,11 +134,8 @@ func (m *Monitor) wrapper(ctx context.Context) {
 			return
 		case <-ticker.C:
 			// Замеряем скорость, если нужно и можно - перезагружаем роутер
-			if m.process() {
-				// Роутер перезагружается, перезапускаемся отложено
-				m.Stop()
-				m.DelayedStart(3 * time.Minute)
-				return
+			if m.canReboot() {
+				m.reboot()
 			}
 		}
 	}
@@ -152,7 +149,7 @@ func (m *Monitor) Start() {
 }
 
 func (m *Monitor) Stop() {
-	if m != nil && m.cancel != nil {
+	if m.cancel != nil {
 		m.Running = false
 		m.cancel()
 	}
@@ -160,8 +157,8 @@ func (m *Monitor) Stop() {
 
 func (m *Monitor) DelayedStart(delay time.Duration) {
 	m.Running = true
-	go (func() {
+	go func() {
 		<-time.After(delay)
 		m.Start()
-	})()
+	}()
 }
