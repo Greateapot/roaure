@@ -1,0 +1,18 @@
+deps:
+  - github.com/protocolbuffers/protobuf
+
+generate:
+  inputs:
+    - directory: roaure
+
+  plugins:
+    - name: go
+      out: ../backend/internal
+      opts:
+        module: github.com/Greateapot/roaure
+
+    - name: go-grpc
+      out: ../backend/internal
+      opts:
+        module: github.com/Greateapot/roaure
+        require_unimplemented_servers: false

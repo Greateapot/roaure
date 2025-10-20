@@ -63,6 +63,7 @@ func main() {
 	// 	},
 	// 	"schedules": [
 	// 		{
+	// 			"ID": "00000000-0000-0000-0000-000000000000",
 	// 			"title": "New Schedule",
 	// 			"starts_at": {
 	// 				"hours": 10,
@@ -89,7 +90,4 @@ func main() {
 	}
 
 	fmt.Println(loaded)
-
-	// Output (std):
-	// &{100.00 Kb {0 5} 3 {localhost 5201} {192.168.1.1 admin admin} [{New Schedule {10 0} {17 0} [Monday Wednesday Friday] true}]}
 }

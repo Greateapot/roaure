@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package roaure.v1;
+
+option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+
+// Хост и данные для входа в админ-панель роутера
+message RouterConf {
+    // Хост
+    string host = 1;
+
+    // Имя пользователя
+    string username = 2;
+
+    // Пароль пользователя
+    string password = 3;
+}

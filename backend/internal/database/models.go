@@ -3,6 +3,8 @@ package database
 import (
 	"fmt"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type DataSize float64
@@ -75,7 +77,10 @@ type Router struct {
 
 // Расписание временных окон, в течение которых можно перезагружать роутер
 type Schedule struct {
-	// Название расписания (удобнее, чем ID)
+	// ID расписания (ключ)
+	ID uuid.UUID
+
+	// Название расписания
 	Title string `json:"title"`
 
 	// Время начала окна (часы)

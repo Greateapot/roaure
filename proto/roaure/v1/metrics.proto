@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package roaure.v1;
+
+option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+
+// Метрик
+message Metrics {
+    // Последняя замеренная скорость загрузки (бит/с)
+    double download_speed = 1;
+
+    // Статус необходимости перезагрузки
+    bool reboot_required = 2;
+
+    // Кол-во подряд плохих замеров
+    int32 bad_count = 3;
+
+    // Запущен ли мониторинг
+    bool monitor_running = 4;
+}

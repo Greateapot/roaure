@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package roaure.v1;
+
+import "roaure/v1/time.proto";
+
+option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+
+// Дни недели
+enum Weekday {
+    // Не указан, при обнаружении выдать ошибку
+    WEEKDAY_UNSPECIFIED = 0;
+
+    // Воскресенье
+    WEEKDAY_SUNDAY = 1;
+
+    // Понедельник
+    WEEKDAY_MONDAY = 2;
+
+    // Вторник
+    WEEKDAY_TUESDAY = 3;
+
+    // Среда
+    WEEKDAY_WEDNESDAY = 4;
+
+    // Четверг
+    WEEKDAY_THURSDAY = 5;
+
+    // Пятница
+    WEEKDAY_FRIDAY = 6;
+
+    // Суббота
+    WEEKDAY_SATURDAY = 7;
+}
+
+// Расписание временных окон, в течение которых можно перезагружать роутер
+message Schedule {
+    // ID расписания (UUIDv7)
+    string id = 1;
+
+    // Название расписания
+    string title = 2;
+
+    // Время начала окна
+    Time starts_at = 3;
+
+    // Время конца окна
+    Time ends_at = 4;
+
+    // Дни недели
+    repeated Weekday weekdays = 5;
+
+    // Состояние (вкл/выкл)
+    bool enabled = 6;
+}

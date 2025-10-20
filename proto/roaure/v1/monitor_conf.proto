@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package roaure.v1;
+
+import "roaure/v1/time.proto";
+
+option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+
+// Конфигурация мониторинга
+message MonitorConf {
+    // Порог загрузки (бит/с)
+    double download_threshold = 1;
+
+    // Интервал замеров
+    Time poll_interval = 2;
+
+    // Кол-во подряд плохих замеров
+    int32 bad_count_limit = 3;
+}

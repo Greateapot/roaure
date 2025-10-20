@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package roaure.v1;
+
+import "google/protobuf/empty.proto";
+
+import "roaure/v1/iperf_server_conf.proto";
+import "roaure/v1/metrics.proto";
+import "roaure/v1/monitor_conf.proto";
+import "roaure/v1/router_conf.proto";
+import "roaure/v1/schedule.proto";
+import "roaure/v1/time.proto";
+
+option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+
+service RoaureService {
+    // Получение текущей конфигурации мониторинга
+    rpc GetMonitorConf(google.protobuf.Empty) returns (MonitorConf);
+
+    // Обновление конфигурации мониторинга
+    rpc UpdateMonitorConf(UpdateMonitorConfRequest) returns (google.protobuf.Empty);
+
+    // Получение текущей информации о iperf3-сервере
+    rpc GetIperfServerConf(google.protobuf.Empty) returns (IperfServerConf);
+
+    // Обновление информации о iperf3-сервере
+    rpc UpdateIperfServerConf(UpdateIperfServerConfRequest) returns (google.protobuf.Empty);
+
+    // Получение текущей информации о роутере
+    rpc GetRouterConf(google.protobuf.Empty) returns (RouterConf);
+
+    // Обновление информации о роутере
+    rpc UpdateRouterConf(UpdateRouterConfRequest) returns (google.protobuf.Empty);
+
+    // Получение списка расписаний
+    rpc ListSchedules(google.protobuf.Empty) returns (ListSchedulesResponse);
+
+    // Создание нового расписания
+    rpc CreateSchedule(CreateScheduleRequest) returns (Schedule);
+
+    // Обновление расписания по его ID (UUIDv7)
+    rpc UpdateSchedule(UpdateScheduleRequest) returns (Schedule);
+
+    // Удаление расписания по его ID (UUIDv7)
+    rpc DeleteSchedule(DeleteScheduleRequest) returns (google.protobuf.Empty);
+
+    // Ручная перезагрузка роутера
+    rpc Reboot(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    // Ручное включение/выключение мониторинга
+    rpc ToggleMonitor(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    // Получение метрики потоком
+    rpc GetMetrics(GetMetricsRequest) returns (stream Metrics);
+}
+
+message UpdateMonitorConfRequest {
+    // Должно быть заполнено полностью
+    MonitorConf monitor_conf = 1;
+}
+
+message UpdateIperfServerConfRequest {
+    // Должно быть заполнено полностью
+    IperfServerConf iperf_server_conf = 1;
+}
+
+message UpdateRouterConfRequest {
+    // Должно быть заполнено полностью
+    RouterConf router_conf = 1;
+}
+
+message ListSchedulesResponse {
+    repeated Schedule schedules = 1;
+}
+
+message CreateScheduleRequest {
+    // Поле ID игнорируется
+    Schedule schedule = 1;
+}
+
+message UpdateScheduleRequest {
+    // ID изменяемого расписания (UUIDv7)
+    string id = 1;
+
+    // Должно быть заполнено полностью
+    //
+    // Поле ID игнорируется
+    Schedule schedule = 2;
+}
+
+message DeleteScheduleRequest {
+    // ID удаляемого расписания
+    string id = 1;
+}
+
+message GetMetricsRequest {
+    // Интервал запросов (сек)
+    int32 poll_interval = 1;
+}

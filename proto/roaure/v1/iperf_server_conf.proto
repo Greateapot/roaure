@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package roaure.v1;
+
+option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+
+// Хост/порт iperf3-сервера для замера скорости
+message IperfServerConf {
+    // Хост
+    string host = 1;
+
+    // Порт
+    int32 port = 2;
+}

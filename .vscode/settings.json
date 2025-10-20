@@ -1,0 +1,13 @@
+{
+    "clang-format.style": "{BasedOnStyle: Google, AlignConsecutiveDeclarations: true, AlignConsecutiveAssignments: true,  ColumnLimit: 0, IndentWidth: 4}",
+    "protoc": {
+        // По какой-то причине `protolint` в моей версии `vscode-proto3`
+        // не использует пути `lint->directories->exclude` из `.protolint.yaml`,
+        // поэтому их надо прописывать здесь.
+        "excludePaths": [
+            ".vscode",
+            "backend",
+            "frontend",
+        ],
+    },
+}
