@@ -12,44 +12,37 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
+const (
+	defaultTimeout = 30 * time.Second
+)
+
 type roaureServiceServer struct {
 	db database.Database
 
-	config          *database.Config
-	routerClient    *router.Client
-	speedtestClient *speedtest.Client
-	monitor         *monitor.Monitor
+	config  *database.RoaureConf
+	monitor *monitor.Monitor
 }
 
 func NewRoaureServiceServer(ctx context.Context, db database.Database) *roaureServiceServer {
 	r := roaureServiceServer{db: db}
 
-	if config, err := db.LoadConfig(); err != nil {
-		grpclog.Fatal(err)
-	} else {
+	if config, err := r.db.LoadConfig(); err == nil {
 		r.config = config
+	} else if config, err := r.db.NewConfig(); err == nil {
+		r.config = config
+	} else {
+		grpclog.Fatalln(err)
 	}
-
-	r.routerClient = router.NewClient(
-		r.config.Router.Host,
-		r.config.Router.Username,
-		r.config.Router.Password,
-		30*time.Second,
-	)
-
-	r.speedtestClient = speedtest.NewClient(
-		r.config.Server.Host,
-		r.config.Server.Port,
-	)
 
 	r.monitor = monitor.NewMonitor(
 		ctx,
-		r.config.DownloadThreshold,
-		r.config.PollInterval,
-		r.config.BadCountLimit,
-		r.config.Schedules,
-		r.routerClient,
-		r.speedtestClient,
+		r.config.MonitorConf,
+		router.NewClient(
+			r.config.RouterConf,
+			defaultTimeout,
+		), speedtest.NewClient(
+			r.config.IperfServerConf,
+		),
 	)
 
 	return &r

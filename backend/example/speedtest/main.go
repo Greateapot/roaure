@@ -8,7 +8,10 @@ import (
 )
 
 func main() {
-	c := speedtest.NewClient("localhost", 5201)
+	c := speedtest.NewClient(&database.IperfServerConf{
+		Host: "localhost",
+		Port: 5201,
+	})
 
 	if bps, err := c.Start(); err != nil {
 		fmt.Println(err)

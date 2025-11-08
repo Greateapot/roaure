@@ -12,10 +12,7 @@ import (
 )
 
 type Monitor struct {
-	DownloadThreshold database.DataSize
-	PollInterval      database.Time
-	BadCountLimit     int32
-	Schedules         []database.Schedule
+	MonitorConf *database.MonitorConf
 
 	RouterClient    *router.Client
 	SpeedtestClient *speedtest.Client
@@ -31,21 +28,15 @@ type Monitor struct {
 
 func NewMonitor(
 	ctx context.Context,
-	downloadThreshold database.DataSize,
-	pollInterval database.Time,
-	badCountLimit int32,
-	schedules []database.Schedule,
+	monitorConf *database.MonitorConf,
 	routerClient *router.Client,
 	speedtestClient *speedtest.Client,
 ) *Monitor {
 	m := Monitor{
-		DownloadThreshold: downloadThreshold,
-		PollInterval:      pollInterval,
-		BadCountLimit:     badCountLimit,
-		Schedules:         schedules,
-		RouterClient:      routerClient,
-		SpeedtestClient:   speedtestClient,
-		ctx:               ctx,
+		MonitorConf:     monitorConf,
+		RouterClient:    routerClient,
+		SpeedtestClient: speedtestClient,
+		ctx:             ctx,
 	}
 
 	return &m
@@ -59,7 +50,7 @@ func (m *Monitor) canRebootNow() bool {
 
 	// Индекс первого расписания, удовлетворяющего условиям:
 	// включен, сегодня, после времени начала и до времени окончания
-	scheduleIndex := slices.IndexFunc(m.Schedules, func(schedule database.Schedule) bool {
+	scheduleIndex := slices.IndexFunc(m.MonitorConf.Schedules, func(schedule *database.Schedule) bool {
 		return schedule.Enabled &&
 			slices.Contains(schedule.Weekdays, weekday) &&
 			hour >= schedule.StartsAt.Hours &&
@@ -83,7 +74,7 @@ func (m *Monitor) canReboot() bool {
 	}
 
 	// Скорость больше порога, все нормально
-	if m.DownloadSpeed > m.DownloadThreshold {
+	if m.DownloadSpeed > m.MonitorConf.DownloadThreshold {
 		m.RebootRequired = false
 		m.BadCount = 0
 		return false
@@ -93,7 +84,7 @@ func (m *Monitor) canReboot() bool {
 	m.BadCount++
 
 	// Недостаточно плохих замеров, чтобы действовать
-	if m.BadCount < m.BadCountLimit {
+	if m.BadCount < m.MonitorConf.BadCountLimit {
 		return false
 	}
 
@@ -107,24 +98,28 @@ func (m *Monitor) canReboot() bool {
 	return true
 }
 
-func (m *Monitor) reboot() {
+func (m *Monitor) Reboot() error {
+	m.Stop()
+
 	if err := m.RouterClient.Reboot(); err != nil {
 		// Не удалось перезагрузить роутер
-		log.Println(err)
-	} else {
-		// Успех, обнуляемся и ждем загрузки роутера
-		m.RebootRequired = false
-		m.BadCount = 0
-		m.Stop()
-		m.DelayedStart(3 * time.Minute)
+		m.RebootRequired = true
+		m.Start()
+		return err
 	}
+
+	// Успех, обнуляемся и ждем загрузки роутера
+	m.RebootRequired = false
+	m.BadCount = 0
+	m.DelayedStart(3 * time.Minute)
+	return nil
 }
 
 func (m *Monitor) wrapper(ctx context.Context) {
 	ticker := time.NewTicker(
 		0 +
-			time.Duration(m.PollInterval.Hours)*time.Hour +
-			time.Duration(m.PollInterval.Minutes)*time.Minute,
+			time.Duration(m.MonitorConf.PollInterval.Hours)*time.Hour +
+			time.Duration(m.MonitorConf.PollInterval.Minutes)*time.Minute,
 	)
 	defer ticker.Stop()
 
@@ -135,7 +130,7 @@ func (m *Monitor) wrapper(ctx context.Context) {
 		case <-ticker.C:
 			// Замеряем скорость, если нужно и можно - перезагружаем роутер
 			if m.canReboot() {
-				m.reboot()
+				m.Reboot()
 			}
 		}
 	}

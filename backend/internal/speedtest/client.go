@@ -4,20 +4,17 @@ import (
 	"fmt"
 
 	"github.com/BGrewell/go-iperf"
+	"github.com/Greateapot/roaure/internal/database"
 )
 
 type Client struct {
-	Host string
-	Port int
+	IperfServerConf *database.IperfServerConf
 
 	iperfClient *iperf.Client
 }
 
-func NewClient(host string, port int) *Client {
-	c := Client{
-		Host: host,
-		Port: port,
-	}
+func NewClient(iperfServerConf *database.IperfServerConf) *Client {
+	c := Client{IperfServerConf: iperfServerConf}
 
 	c.SetupClient()
 
@@ -27,8 +24,8 @@ func NewClient(host string, port int) *Client {
 func (c *Client) SetupClient() {
 	c.Stop()
 
-	c.iperfClient = iperf.NewClient(c.Host)
-	c.iperfClient.SetPort(c.Port)
+	c.iperfClient = iperf.NewClient(c.IperfServerConf.Host)
+	c.iperfClient.SetPort(int(c.IperfServerConf.Port))
 	c.iperfClient.SetReverse(true)
 	c.iperfClient.SetTimeSec(10)
 	c.iperfClient.SetInterval(2)
