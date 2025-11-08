@@ -108,8 +108,8 @@ type Schedule struct {
 // Время (для удобного хранения часов/минут)
 type Time struct {
 	// Часы
-	Hours int8 `json:"hours"`
+	Hours int32 `json:"hours"`
 
 	// Минуты
-	Minutes int8 `json:"minutes"`
+	Minutes int32 `json:"minutes"`
 }

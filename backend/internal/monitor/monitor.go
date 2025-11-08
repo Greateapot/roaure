@@ -45,8 +45,8 @@ func NewMonitor(
 func (m *Monitor) canRebootNow() bool {
 	now := time.Now()
 	weekday := now.Weekday()
-	hour := int8(now.Hour())
-	minute := int8(now.Minute())
+	hour := int32(now.Hour())
+	minute := int32(now.Minute())
 
 	// Индекс первого расписания, удовлетворяющего условиям:
 	// включен, сегодня, после времени начала и до времени окончания

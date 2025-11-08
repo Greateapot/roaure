@@ -38,3 +38,6 @@ gen/
 # configs
 config/
 configs/
+
+# build
+/build/

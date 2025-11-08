@@ -3,12 +3,19 @@ package server
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // ToggleMonitor implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) ToggleMonitor(ctx context.Context, request *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Error(codes.Unimplemented, "unimplemented")
+func (s *roaureServiceServer) ToggleMonitor(
+	ctx context.Context,
+	request *emptypb.Empty,
+) (*emptypb.Empty, error) {
+	if s.monitor.Running {
+		s.monitor.Stop()
+	} else {
+		s.monitor.Start()
+	}
+
+	return &emptypb.Empty{}, nil
 }

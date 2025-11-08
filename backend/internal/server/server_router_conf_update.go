@@ -19,7 +19,10 @@ const (
 )
 
 // UpdateRouterConf implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) UpdateRouterConf(ctx context.Context, request *roaurev1.UpdateRouterConfRequest) (*emptypb.Empty, error) {
+func (s *roaureServiceServer) UpdateRouterConf(
+	ctx context.Context,
+	request *roaurev1.UpdateRouterConfRequest,
+) (*emptypb.Empty, error) {
 	var parsedRequest updateRouterConfRequest
 	if err := parsedRequest.parse(request); err != nil {
 		return nil, err
