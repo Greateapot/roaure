@@ -18,7 +18,7 @@ type Monitor struct {
 	SpeedtestClient *speedtest.Client
 
 	DownloadSpeed  database.DataSize
-	BadCount       int32
+	BadCount       uint8
 	RebootRequired bool
 	Running        bool
 
@@ -45,8 +45,8 @@ func NewMonitor(
 func (m *Monitor) canRebootNow() bool {
 	now := time.Now()
 	weekday := now.Weekday()
-	hour := int32(now.Hour())
-	minute := int32(now.Minute())
+	hour := uint8(now.Hour())
+	minute := uint8(now.Minute())
 
 	// Индекс первого расписания, удовлетворяющего условиям:
 	// включен, сегодня, после времени начала и до времени окончания

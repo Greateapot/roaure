@@ -41,7 +41,7 @@ func (s *roaureServiceServer) deleteSchedule(
 	schedule := s.config.MonitorConf.Schedules[scheduleIndex]
 
 	s.config.MonitorConf.Schedules = slices.Delete(s.config.MonitorConf.Schedules, scheduleIndex, scheduleIndex+1)
-	if err := s.db.DumpConfig(s.config); err != nil {
+	if err := s.Database.DumpConfig(s.config); err != nil {
 		// Не удалось сохранить изменения, откат
 		s.config.MonitorConf.Schedules = append(s.config.MonitorConf.Schedules, schedule)
 		grpclog.Errorln(err)

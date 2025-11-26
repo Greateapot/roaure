@@ -8,10 +8,7 @@ import (
 )
 
 // GetRouterConf implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) GetRouterConf(
-	ctx context.Context,
-	request *emptypb.Empty,
-) (*roaurev1.RouterConf, error) {
+func (s *roaureServiceServer) GetRouterConf(context.Context, *emptypb.Empty) (*roaurev1.RouterConf, error) {
 	return &roaurev1.RouterConf{
 		Host:     s.config.RouterConf.Host,
 		Username: s.config.RouterConf.Username,

@@ -8,12 +8,9 @@ import (
 )
 
 // GetIperfServerConf implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) GetIperfServerConf(
-	ctx context.Context,
-	request *emptypb.Empty,
-) (*roaurev1.IperfServerConf, error) {
+func (s *roaureServiceServer) GetIperfServerConf(context.Context, *emptypb.Empty) (*roaurev1.IperfServerConf, error) {
 	return &roaurev1.IperfServerConf{
 		Host: s.config.IperfServerConf.Host,
-		Port: s.config.IperfServerConf.Port,
+		Port: int32(s.config.IperfServerConf.Port),
 	}, nil
 }

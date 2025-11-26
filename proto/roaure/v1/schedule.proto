@@ -4,7 +4,9 @@ package roaure.v1;
 
 import "roaure/v1/time.proto";
 
-option go_package = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+option go_package          = "github.com/Greateapot/roaure/genproto/roaure/v1;roaurev1";
+option java_package        = "re.greateapot.roaure.api.dto";
+option java_multiple_files = true;
 
 // Дни недели
 enum Weekday {

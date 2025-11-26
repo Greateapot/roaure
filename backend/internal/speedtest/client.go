@@ -16,16 +16,16 @@ type Client struct {
 func NewClient(iperfServerConf *database.IperfServerConf) *Client {
 	c := Client{IperfServerConf: iperfServerConf}
 
-	c.SetupClient()
+	c.UpdateClient()
 
 	return &c
 }
 
-func (c *Client) SetupClient() {
+func (c *Client) UpdateClient() {
 	c.Stop()
 
 	c.iperfClient = iperf.NewClient(c.IperfServerConf.Host)
-	c.iperfClient.SetPort(int(c.IperfServerConf.Port))
+	c.iperfClient.SetPort(c.IperfServerConf.Port)
 	c.iperfClient.SetReverse(true)
 	c.iperfClient.SetTimeSec(10)
 	c.iperfClient.SetInterval(2)

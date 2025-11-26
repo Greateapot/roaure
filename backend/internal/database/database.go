@@ -118,4 +118,4 @@ func (d *database) NewConfig() (*RoaureConf, error) {
 	return c, nil
 }
 
-var _ Database = (*database)(nil)
+var _ Database = &database{}

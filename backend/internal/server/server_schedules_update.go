@@ -44,19 +44,19 @@ func (s *roaureServiceServer) updateSchedule(
 		ID:    request.id,
 		Title: request.schedule.Title,
 		StartsAt: &database.Time{
-			Hours:   request.schedule.StartsAt.Hours,
-			Minutes: request.schedule.StartsAt.Minutes,
+			Hours:   uint8(request.schedule.StartsAt.Hours),
+			Minutes: uint8(request.schedule.StartsAt.Minutes),
 		},
 		EndsAt: &database.Time{
-			Hours:   request.schedule.EndsAt.Hours,
-			Minutes: request.schedule.EndsAt.Minutes,
+			Hours:   uint8(request.schedule.EndsAt.Hours),
+			Minutes: uint8(request.schedule.EndsAt.Minutes),
 		},
 		Weekdays: request.weekdays,
 		Enabled:  request.schedule.Enabled,
 	}
 
 	s.config.MonitorConf.Schedules[scheduleIndex] = newSchedule
-	if err := s.db.DumpConfig(s.config); err != nil {
+	if err := s.Database.DumpConfig(s.config); err != nil {
 		// Не удалось сохранить изменения, откат
 		s.config.MonitorConf.Schedules[scheduleIndex] = oldSchedule
 		grpclog.Errorln(err)

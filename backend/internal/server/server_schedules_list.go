@@ -8,10 +8,7 @@ import (
 )
 
 // ListSchedules implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) ListSchedules(
-	ctx context.Context,
-	request *emptypb.Empty,
-) (*roaurev1.ListSchedulesResponse, error) {
+func (s *roaureServiceServer) ListSchedules(context.Context, *emptypb.Empty) (*roaurev1.ListSchedulesResponse, error) {
 	response := roaurev1.ListSchedulesResponse{
 		Schedules: make([]*roaurev1.Schedule, 0, len(s.config.MonitorConf.Schedules)),
 	}

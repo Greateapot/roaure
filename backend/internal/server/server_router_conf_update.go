@@ -28,6 +28,7 @@ func (s *roaureServiceServer) UpdateRouterConf(
 		return nil, err
 	}
 	return s.updateRouterConf(ctx, &parsedRequest)
+
 }
 
 func (s *roaureServiceServer) updateRouterConf(
@@ -42,7 +43,7 @@ func (s *roaureServiceServer) updateRouterConf(
 	s.config.RouterConf.Username = request.routerConf.Username
 	s.config.RouterConf.Password = request.routerConf.Password
 
-	if err := s.db.DumpConfig(s.config); err != nil {
+	if err := s.Database.DumpConfig(s.config); err != nil {
 		// Не удалось сохранить изменения, откат
 		s.config.RouterConf.Host = oldHost
 		s.config.RouterConf.Username = oldUsername

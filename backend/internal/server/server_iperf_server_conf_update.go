@@ -36,9 +36,9 @@ func (s *roaureServiceServer) updateIperfServerConf(
 	oldPort := s.config.IperfServerConf.Port
 
 	s.config.IperfServerConf.Host = request.iperfServerConf.Host
-	s.config.IperfServerConf.Port = request.iperfServerConf.Port
+	s.config.IperfServerConf.Port = int(request.iperfServerConf.Port)
 
-	if err := s.db.DumpConfig(s.config); err != nil {
+	if err := s.Database.DumpConfig(s.config); err != nil {
 		// Не удалось сохранить изменения, откат
 		s.config.IperfServerConf.Host = oldHost
 		s.config.IperfServerConf.Port = oldPort
@@ -46,7 +46,7 @@ func (s *roaureServiceServer) updateIperfServerConf(
 		return nil, status.Errorf(codes.Internal, "unnable to save changes: %s", err.Error())
 	}
 
-	s.monitor.SpeedtestClient.SetupClient()
+	s.monitor.SpeedtestClient.UpdateClient()
 
 	return &emptypb.Empty{}, nil
 }

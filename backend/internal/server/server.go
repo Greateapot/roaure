@@ -17,18 +17,18 @@ const (
 )
 
 type roaureServiceServer struct {
-	db database.Database
+	Database database.Database
 
 	config  *database.RoaureConf
 	monitor *monitor.Monitor
 }
 
-func NewRoaureServiceServer(ctx context.Context, db database.Database) *roaureServiceServer {
-	r := roaureServiceServer{db: db}
+func NewRoaureServiceServer(ctx context.Context, database database.Database) *roaureServiceServer {
+	r := roaureServiceServer{Database: database}
 
-	if config, err := r.db.LoadConfig(); err == nil {
+	if config, err := database.LoadConfig(); err == nil {
 		r.config = config
-	} else if config, err := r.db.NewConfig(); err == nil {
+	} else if config, err := database.NewConfig(); err == nil {
 		r.config = config
 	} else {
 		grpclog.Fatalln(err)
@@ -48,4 +48,4 @@ func NewRoaureServiceServer(ctx context.Context, db database.Database) *roaureSe
 	return &r
 }
 
-var _ roaurev1.RoaureServiceServer = (*roaureServiceServer)(nil)
+var _ roaurev1.RoaureServiceServer = &roaureServiceServer{}

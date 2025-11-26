@@ -21,7 +21,6 @@ func main() {
 	configPath := os.Getenv("CONFIG_PATH")
 	network := os.Getenv("SERVER_NETWORK")
 	address := os.Getenv("SERVER_ADDRESS")
-	_, reflect := os.LookupEnv("SERVER_REFLECTION")
 
 	lis, err := net.Listen(network, address)
 	if err != nil {
@@ -32,9 +31,7 @@ func main() {
 
 	s := grpc.NewServer()
 	roaurev1.RegisterRoaureServiceServer(s, server.NewRoaureServiceServer(ctx, database))
-	if reflect {
-		reflection.Register(s)
-	}
+	reflection.Register(s)
 
 	// Красивая остановка по сигналу
 	go GracefulStop(s)

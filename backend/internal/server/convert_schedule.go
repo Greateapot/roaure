@@ -16,12 +16,12 @@ func ConvertScheduleRowToProto(schedule *database.Schedule) *roaurev1.Schedule {
 		Id:    schedule.ID.String(),
 		Title: schedule.Title,
 		StartsAt: &roaurev1.Time{
-			Hours:   int32(schedule.StartsAt.Hours),
-			Minutes: int32(schedule.StartsAt.Minutes),
+			Hours:   uint32(schedule.StartsAt.Hours),
+			Minutes: uint32(schedule.StartsAt.Minutes),
 		},
 		EndsAt: &roaurev1.Time{
-			Hours:   int32(schedule.EndsAt.Hours),
-			Minutes: int32(schedule.EndsAt.Minutes),
+			Hours:   uint32(schedule.EndsAt.Hours),
+			Minutes: uint32(schedule.EndsAt.Minutes),
 		},
 		Weekdays: weekdays,
 		Enabled:  schedule.Enabled,

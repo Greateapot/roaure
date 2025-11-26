@@ -31,25 +31,14 @@ func (s *roaureServiceServer) GetMetrics(
 
 	for {
 		if err := server.Send(&roaurev1.Metrics{
-			DownloadSpeed:  s.monitor.DownloadSpeed.Float(),
+			DownloadSpeed:  float64(s.monitor.DownloadSpeed),
 			RebootRequired: s.monitor.RebootRequired,
-			BadCount:       s.monitor.BadCount,
+			BadCount:       uint32(s.monitor.BadCount),
 			MonitorRunning: s.monitor.Running,
 		}); err != nil {
-			st, ok := status.FromError(err)
-			if !ok {
-				// runtime error
-				panic(err)
-			}
-
-			switch st.Code() {
-			case codes.Canceled, codes.Unavailable:
-				// valid codes, skip
-			default:
-				// log it
+			if s, ok := status.FromError(err); !ok || s.Code() != codes.Canceled {
 				grpclog.Errorln(err)
 			}
-
 			return nil
 		}
 

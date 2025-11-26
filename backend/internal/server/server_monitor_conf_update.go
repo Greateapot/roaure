@@ -14,7 +14,7 @@ import (
 
 const (
 	maxDownloadThreshold = 128 * database.MBit
-	maxBadCountLimit     = 10
+	maxBadCountLimit     = 100
 )
 
 // UpdateMonitorConf implements roaurev1.RoaureServiceServer.
@@ -39,12 +39,12 @@ func (s *roaureServiceServer) updateMonitorConf(
 
 	s.config.MonitorConf.DownloadThreshold = database.DataSize(request.monitorConf.DownloadThreshold)
 	s.config.MonitorConf.PollInterval = &database.Time{
-		Hours:   request.monitorConf.PollInterval.Hours,
-		Minutes: request.monitorConf.PollInterval.Minutes,
+		Hours:   uint8(request.monitorConf.PollInterval.Hours),
+		Minutes: uint8(request.monitorConf.PollInterval.Minutes),
 	}
-	s.config.MonitorConf.BadCountLimit = request.monitorConf.BadCountLimit
+	s.config.MonitorConf.BadCountLimit = uint8(request.monitorConf.BadCountLimit)
 
-	if err := s.db.DumpConfig(s.config); err != nil {
+	if err := s.Database.DumpConfig(s.config); err != nil {
 		// Не удалось сохранить изменения, откат
 		s.config.MonitorConf.DownloadThreshold = oldDownloadThreshold
 		s.config.MonitorConf.PollInterval = oldPollInterval
@@ -91,7 +91,7 @@ func (r *updateMonitorConfRequest) parse(request *roaurev1.UpdateMonitorConfRequ
 		if request.GetMonitorConf().GetBadCountLimit() == 0 {
 			v.AddFieldViolation("monitor_conf.bad_count_limit", "required field")
 		} else if request.GetMonitorConf().GetBadCountLimit() > maxBadCountLimit {
-			v.AddFieldViolation("monitor_conf.download_threshold", "should be <= 10")
+			v.AddFieldViolation("monitor_conf.bad_count_limit", "should be <= 100")
 		}
 
 		r.monitorConf = request.GetMonitorConf()

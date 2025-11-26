@@ -8,16 +8,13 @@ import (
 )
 
 // GetMonitorConf implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) GetMonitorConf(
-	ctx context.Context,
-	request *emptypb.Empty,
-) (*roaurev1.MonitorConf, error) {
+func (s *roaureServiceServer) GetMonitorConf(context.Context, *emptypb.Empty) (*roaurev1.MonitorConf, error) {
 	return &roaurev1.MonitorConf{
-		DownloadThreshold: s.config.MonitorConf.DownloadThreshold.Float(),
+		DownloadThreshold: float64(s.config.MonitorConf.DownloadThreshold),
 		PollInterval: &roaurev1.Time{
-			Hours:   int32(s.config.MonitorConf.PollInterval.Hours),
-			Minutes: int32(s.config.MonitorConf.PollInterval.Minutes),
+			Hours:   uint32(s.config.MonitorConf.PollInterval.Hours),
+			Minutes: uint32(s.config.MonitorConf.PollInterval.Minutes),
 		},
-		BadCountLimit: s.config.MonitorConf.BadCountLimit,
+		BadCountLimit: uint32(s.config.MonitorConf.BadCountLimit),
 	}, nil
 }

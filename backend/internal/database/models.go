@@ -33,10 +33,6 @@ func (d DataSize) String() string {
 	}
 }
 
-func (d DataSize) Float() float64 {
-	return float64(d)
-}
-
 // Конфигурация сервера
 type RoaureConf struct {
 	MonitorConf *MonitorConf `json:"monitor_conf"`
@@ -57,7 +53,7 @@ type MonitorConf struct {
 	PollInterval *Time `json:"poll_interval"`
 
 	// Кол-во подряд плохих замеров
-	BadCountLimit int32 `json:"bad_count_limit"`
+	BadCountLimit uint8 `json:"bad_count_limit"`
 
 	// Расписание временных окон
 	Schedules []*Schedule `json:"schedules"`
@@ -69,7 +65,7 @@ type IperfServerConf struct {
 	Host string `json:"host"`
 
 	// Порт
-	Port int32 `json:"port"`
+	Port int `json:"port"`
 }
 
 // Хост и данные для входа в админ-панель роутера
@@ -108,8 +104,8 @@ type Schedule struct {
 // Время (для удобного хранения часов/минут)
 type Time struct {
 	// Часы
-	Hours int32 `json:"hours"`
+	Hours uint8 `json:"hours"`
 
 	// Минуты
-	Minutes int32 `json:"minutes"`
+	Minutes uint8 `json:"minutes"`
 }

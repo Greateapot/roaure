@@ -7,10 +7,7 @@ import (
 )
 
 // ToggleMonitor implements roaurev1.RoaureServiceServer.
-func (s *roaureServiceServer) ToggleMonitor(
-	ctx context.Context,
-	request *emptypb.Empty,
-) (*emptypb.Empty, error) {
+func (s *roaureServiceServer) ToggleMonitor(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	if s.monitor.Running {
 		s.monitor.Stop()
 	} else {

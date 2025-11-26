@@ -31,13 +31,8 @@ go.work.sum
 # .idea/
 # .vscode/
 
-# generated
+# Generated protos
 genproto/
-gen/
 
-# configs
-config/
-configs/
-
-# build
-/build/
+# Temporal
+/temp
