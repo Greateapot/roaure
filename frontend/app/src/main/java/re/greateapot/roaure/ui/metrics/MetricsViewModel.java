@@ -1,7 +1,5 @@
 package re.greateapot.roaure.ui.metrics;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,14 +7,29 @@ import androidx.lifecycle.ViewModel;
 import re.greateapot.roaure.api.RoaureServiceClient;
 
 public class MetricsViewModel extends ViewModel {
-    private static final String TAG = "MetricsVM";
 
     private final MutableLiveData<Boolean> isStarted = new MutableLiveData<>(false);
-    private final MutableLiveData<Double> metricValue = new MutableLiveData<>(0.0);
+    private final MutableLiveData<Double> metricValue = new MutableLiveData<>();
+    private final MutableLiveData<Integer> badCountValue = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> rebootRequiredValue = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> monitorRunningValue = new MutableLiveData<>();
 
     public LiveData<Double> getMetricValue() {
         return metricValue;
     }
+
+    public LiveData<Integer> getBadCountValue() {
+        return badCountValue;
+    }
+
+    public LiveData<Boolean> getRebootRequiredValue() {
+        return rebootRequiredValue;
+    }
+
+    public LiveData<Boolean> getMonitorRunningValue() {
+        return monitorRunningValue;
+    }
+
 
     public void getMetrics() {
         if (Boolean.TRUE.equals(isStarted.getValue())) return;
@@ -25,14 +38,31 @@ public class MetricsViewModel extends ViewModel {
         RoaureServiceClient.getInstance().getMetrics(
                 10,
                 metric -> {
-                    Log.i(TAG, String.format("DLS: %f", metric.getDownloadSpeed()));
                     metricValue.postValue(metric.getDownloadSpeed());
+                    badCountValue.postValue(metric.getBadCount());
+                    rebootRequiredValue.postValue(metric.getRebootRequired());
+                    monitorRunningValue.postValue(metric.getMonitorRunning());
                 },
                 status -> {
-                    // TODO: toast
-                    Log.i(TAG, String.format("Error (%s): %s", status.getCode().toString(), status.getDescription()));
+                    // TODO: show snackbar with retry button
+                    isStarted.postValue(false);
                 },
-                () -> {}
+                () -> {
+                    isStarted.postValue(false);
+                }
+        );
+    }
+
+    public void toggleMonitor() {
+        RoaureServiceClient.getInstance().toggleMonitor(
+                e -> {
+                    boolean monitorRunning = Boolean.TRUE.equals(monitorRunningValue.getValue());
+                    monitorRunningValue.postValue(!monitorRunning);
+                },
+                status -> {
+                    // TODO: show snackbar with retry button
+                },
+                () -> { /* nothing */ }
         );
     }
 }
