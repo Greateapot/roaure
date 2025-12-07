@@ -9,10 +9,26 @@ import re.greateapot.roaure.api.RoaureServiceClient;
 
 public class MetricsViewModel extends ViewModel {
 
+    public static class MetricsViewModelError {
+
+        public interface MetricsViewModelErrorCallback {
+            void retry();
+        }
+
+        public final Status status;
+        public final MetricsViewModelErrorCallback callback;
+
+        public MetricsViewModelError(Status status, MetricsViewModelErrorCallback callback) {
+            this.status = status;
+            this.callback = callback;
+        }
+    }
+
     private final MutableLiveData<Double> downloadSpeedValue = new MutableLiveData<>();
     private final MutableLiveData<Integer> badCountValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> rebootRequiredValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> monitorRunningValue = new MutableLiveData<>();
+    private final MutableLiveData<MetricsViewModelError> errorValue = new MutableLiveData<>();
 
     public LiveData<Double> getDownloadSpeedValue() {
         return downloadSpeedValue;
@@ -30,11 +46,15 @@ public class MetricsViewModel extends ViewModel {
         return monitorRunningValue;
     }
 
+    public LiveData<MetricsViewModelError> getErrorValue() {
+        return errorValue;
+    }
+
     private boolean isStarted = false;
 
     public void getMetrics() {
         if (isStarted) return;
-        isStarted =true;
+        isStarted = true;
 
         RoaureServiceClient.getInstance().getMetrics(
                 10,
@@ -45,10 +65,11 @@ public class MetricsViewModel extends ViewModel {
                     monitorRunningValue.postValue(metric.getMonitorRunning());
                 },
                 status -> {
-                    // TODO: show snackbar with retry button
                     isStarted = false;
+                    errorValue.postValue(new MetricsViewModelError(status, this::getMetrics));
                 },
                 () -> {
+                    // There's nothing we can do...
                     isStarted = false;
                 }
         );
@@ -61,7 +82,7 @@ public class MetricsViewModel extends ViewModel {
                     monitorRunningValue.postValue(!monitorRunning);
                 },
                 status -> {
-                    // TODO: show snackbar with retry button
+                    errorValue.postValue(new MetricsViewModelError(status, this::toggleMonitor));
                 },
                 () -> { /* nothing */ }
         );

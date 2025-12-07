@@ -1,6 +1,7 @@
 package re.greateapot.roaure.ui.metrics;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
@@ -34,7 +36,6 @@ public class MetricsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MetricsViewModel.class);
-
 
         view.findViewById(R.id.toggle_monitor_button).setOnClickListener(view1 -> mViewModel.toggleMonitor());
 
@@ -99,6 +100,17 @@ public class MetricsFragment extends Fragment {
                     mb.setSelected(false);
                 }
             });
+        });
+
+        mViewModel.getErrorValue().observe(getViewLifecycleOwner(), value -> {
+            // TODO: code mapper (unavailable, deadline_exceeded & etc -> err occurred; other -> desc)
+            String message = value.status.getCode().toString();
+            Snackbar
+                    .make(view, message, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Retry", view2 -> {
+                        value.callback.retry();
+                    })
+                    .show();
         });
 
         // Start polling

@@ -3,6 +3,8 @@ package re.greateapot.roaure.api;
 
 import com.google.protobuf.Empty;
 
+import java.util.concurrent.TimeUnit;
+
 import io.grpc.ManagedChannel;
 import io.grpc.Status;
 import io.grpc.android.AndroidChannelBuilder;
@@ -84,7 +86,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        return new StreamObserver<T>() {
+        return new StreamObserver<>() {
             @Override
             public void onNext(T value) {
                 onValueListener.onValue(value);
@@ -92,8 +94,7 @@ public class RoaureServiceClient {
 
             @Override
             public void onError(Throwable t) {
-                Status status = Status.fromThrowable(t);
-                onStatusListener.onStatus(status);
+                onStatusListener.onStatus(Status.fromThrowable(t));
             }
 
             @Override
@@ -109,6 +110,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
+        // NOTE: In java you CAN'T RECONNECT, STOP STREAM, RETRY & TRY AGAIN. If client can't connect - restart app.
         asyncStub.getMetrics(
                 GetMetricsRequest
                         .newBuilder()
@@ -123,7 +125,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.getMonitorConf(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).getMonitorConf(
                 Empty
                         .newBuilder()
                         .build(),
@@ -136,7 +138,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.getRouterConf(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).getRouterConf(
                 Empty
                         .newBuilder()
                         .build(),
@@ -149,7 +151,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.getIperfServerConf(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).getIperfServerConf(
                 Empty
                         .newBuilder()
                         .build(),
@@ -163,7 +165,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.updateMonitorConf(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).updateMonitorConf(
                 UpdateMonitorConfRequest
                         .newBuilder()
                         .setMonitorConf(monitorConf)
@@ -178,7 +180,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.updateRouterConf(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).updateRouterConf(
                 UpdateRouterConfRequest
                         .newBuilder()
                         .setRouterConf(routerConf)
@@ -193,7 +195,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.updateIperfServerConf(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).updateIperfServerConf(
                 UpdateIperfServerConfRequest
                         .newBuilder()
                         .setIperfServerConf(iperfServerConf)
@@ -207,7 +209,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.toggleMonitor(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).toggleMonitor(
                 Empty
                         .newBuilder()
                         .build(),
@@ -220,7 +222,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.reboot(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).reboot(
                 Empty
                         .newBuilder()
                         .build(),
@@ -233,7 +235,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.listSchedules(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).listSchedules(
                 Empty
                         .newBuilder()
                         .build(),
@@ -247,7 +249,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.createSchedule(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).createSchedule(
                 CreateScheduleRequest
                         .newBuilder()
                         .setSchedule(schedule)
@@ -263,7 +265,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.updateSchedule(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).updateSchedule(
                 UpdateScheduleRequest
                         .newBuilder()
                         .setId(id)
@@ -279,7 +281,7 @@ public class RoaureServiceClient {
             OnStatusListener onStatusListener,
             OnCompletedListener onCompletedListener
     ) {
-        asyncStub.deleteSchedule(
+        asyncStub.withDeadlineAfter(5, TimeUnit.SECONDS).deleteSchedule(
                 DeleteScheduleRequest
                         .newBuilder()
                         .setId(id)
