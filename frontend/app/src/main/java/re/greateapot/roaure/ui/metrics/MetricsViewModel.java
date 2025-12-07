@@ -4,18 +4,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import io.grpc.Status;
 import re.greateapot.roaure.api.RoaureServiceClient;
 
 public class MetricsViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> isStarted = new MutableLiveData<>(false);
-    private final MutableLiveData<Double> metricValue = new MutableLiveData<>();
+    private final MutableLiveData<Double> downloadSpeedValue = new MutableLiveData<>();
     private final MutableLiveData<Integer> badCountValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> rebootRequiredValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> monitorRunningValue = new MutableLiveData<>();
 
-    public LiveData<Double> getMetricValue() {
-        return metricValue;
+    public LiveData<Double> getDownloadSpeedValue() {
+        return downloadSpeedValue;
     }
 
     public LiveData<Integer> getBadCountValue() {
@@ -30,25 +30,26 @@ public class MetricsViewModel extends ViewModel {
         return monitorRunningValue;
     }
 
+    private boolean isStarted = false;
 
     public void getMetrics() {
-        if (Boolean.TRUE.equals(isStarted.getValue())) return;
-        isStarted.postValue(true);
+        if (isStarted) return;
+        isStarted =true;
 
         RoaureServiceClient.getInstance().getMetrics(
                 10,
                 metric -> {
-                    metricValue.postValue(metric.getDownloadSpeed());
+                    downloadSpeedValue.postValue(metric.getDownloadSpeed());
                     badCountValue.postValue(metric.getBadCount());
                     rebootRequiredValue.postValue(metric.getRebootRequired());
                     monitorRunningValue.postValue(metric.getMonitorRunning());
                 },
                 status -> {
                     // TODO: show snackbar with retry button
-                    isStarted.postValue(false);
+                    isStarted = false;
                 },
                 () -> {
-                    isStarted.postValue(false);
+                    isStarted = false;
                 }
         );
     }

@@ -9,4 +9,9 @@
         android:name="re.greateapot.roaure.ui.metrics.MetricsFragment"
         android:label="@string/nav_graph_metrics_fragment_label"
         tools:layout="@layout/fragment_metrics" />
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="re.greateapot.roaure.ui.settings.SettingsFragment"
+        android:label="@string/nav_graph_settings_fragment_label"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
