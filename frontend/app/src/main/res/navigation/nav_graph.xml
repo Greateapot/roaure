@@ -14,4 +14,24 @@
         android:name="re.greateapot.roaure.ui.settings.SettingsFragment"
         android:label="@string/nav_graph_settings_fragment_label"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/iperf_server_conf_fragment"
+        android:name="re.greateapot.roaure.ui.iperf_server_conf.IperfServerConfFragment"
+        android:label="@string/nav_graph_iperf_server_conf_fragment_label"
+        tools:layout="@layout/fragment_iperf_server_conf" />
+    <fragment
+        android:id="@+id/monitor_conf_fragment"
+        android:name="re.greateapot.roaure.ui.monitor_conf.MonitorConfFragment"
+        android:label="@string/nav_graph_monitor_conf_fragment_label"
+        tools:layout="@layout/fragment_monitor_conf" />
+    <fragment
+        android:id="@+id/router_conf_fragment"
+        android:name="re.greateapot.roaure.ui.router_conf.RouterConfFragment"
+        android:label="@string/nav_graph_router_conf_fragment_label"
+        tools:layout="@layout/fragment_router_conf" />
+    <fragment
+        android:id="@+id/schedule_fragment"
+        android:name="re.greateapot.roaure.ui.schedule.ScheduleFragment"
+        android:label="@string/nav_graph_schedule_fragment_label"
+        tools:layout="@layout/fragment_schedule" />
 </navigation>

@@ -129,14 +129,31 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:backgroundTint="@color/toggle_button_color"
-            android:id="@+id/toggle_monitor_button"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/loading"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggle_monitor_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/toggle_button_color"
+                android:text="@string/loading"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/go_to_schedule_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="@string/go_to_schedule"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

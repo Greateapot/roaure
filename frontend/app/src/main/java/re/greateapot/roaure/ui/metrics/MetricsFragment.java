@@ -1,7 +1,6 @@
 package re.greateapot.roaure.ui.metrics;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,6 +38,14 @@ public class MetricsFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(MetricsViewModel.class);
 
         view.findViewById(R.id.toggle_monitor_button).setOnClickListener(view1 -> mViewModel.toggleMonitor());
+        view.findViewById(R.id.go_to_schedule_button).setOnClickListener(view1 -> {
+            FragmentActivity activity = getActivity();
+            if (activity == null) return;
+
+            Navigation
+                    .findNavController(activity, R.id.nav_host_fragment_content_main)
+                    .navigate(R.id.schedule_fragment);
+        });
 
         mViewModel.getDownloadSpeedValue().observe(getViewLifecycleOwner(), value -> {
             FragmentActivity activity = getActivity();
@@ -107,9 +115,7 @@ public class MetricsFragment extends Fragment {
             String message = value.status.getCode().toString();
             Snackbar
                     .make(view, message, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Retry", view2 -> {
-                        value.callback.retry();
-                    })
+                    .setAction("Retry", view2 -> value.callback.retry())
                     .show();
         });
 

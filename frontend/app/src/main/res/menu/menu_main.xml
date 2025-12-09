@@ -7,4 +7,19 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_monitor_conf"
+        android:orderInCategory="10"
+        android:title="@string/action_monitor_conf"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_iperf_server_conf"
+        android:orderInCategory="11"
+        android:title="@string/action_iperf_server_conf"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_router_conf"
+        android:orderInCategory="12"
+        android:title="@string/action_router_conf"
+        app:showAsAction="never" />
 </menu>

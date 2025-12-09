@@ -48,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             navController.navigate(R.id.settings_fragment);
             return true;
+        } else if (id == R.id.action_iperf_server_conf) {
+            navController.navigate(R.id.iperf_server_conf_fragment);
+            return true;
+        } else if (id == R.id.action_monitor_conf) {
+            navController.navigate(R.id.monitor_conf_fragment);
+            return true;
+        } else if (id == R.id.action_router_conf) {
+            navController.navigate(R.id.router_conf_fragment);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
