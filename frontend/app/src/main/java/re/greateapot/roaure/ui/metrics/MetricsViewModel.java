@@ -4,31 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import io.grpc.Status;
 import re.greateapot.roaure.api.RoaureServiceClient;
+import re.greateapot.roaure.models.StatusWithCallback;
 
 public class MetricsViewModel extends ViewModel {
-
-    public static class MetricsViewModelError {
-
-        public interface MetricsViewModelErrorCallback {
-            void retry();
-        }
-
-        public final Status status;
-        public final MetricsViewModelErrorCallback callback;
-
-        public MetricsViewModelError(Status status, MetricsViewModelErrorCallback callback) {
-            this.status = status;
-            this.callback = callback;
-        }
-    }
 
     private final MutableLiveData<Double> downloadSpeedValue = new MutableLiveData<>();
     private final MutableLiveData<Integer> badCountValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> rebootRequiredValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> monitorRunningValue = new MutableLiveData<>();
-    private final MutableLiveData<MetricsViewModelError> errorValue = new MutableLiveData<>();
+    private final MutableLiveData<StatusWithCallback> statusValue = new MutableLiveData<>();
 
     public LiveData<Double> getDownloadSpeedValue() {
         return downloadSpeedValue;
@@ -46,8 +31,8 @@ public class MetricsViewModel extends ViewModel {
         return monitorRunningValue;
     }
 
-    public LiveData<MetricsViewModelError> getErrorValue() {
-        return errorValue;
+    public LiveData<StatusWithCallback> getStatusValue() {
+        return statusValue;
     }
 
     private boolean isStarted = false;
@@ -66,7 +51,7 @@ public class MetricsViewModel extends ViewModel {
                 },
                 status -> {
                     isStarted = false;
-                    errorValue.postValue(new MetricsViewModelError(status, this::getMetrics));
+                    statusValue.postValue(new StatusWithCallback(status, this::getMetrics));
                 },
                 () -> {
                     // There's nothing we can do...
@@ -82,7 +67,7 @@ public class MetricsViewModel extends ViewModel {
                     monitorRunningValue.postValue(!monitorRunning);
                 },
                 status -> {
-                    errorValue.postValue(new MetricsViewModelError(status, this::toggleMonitor));
+                    statusValue.postValue(new StatusWithCallback(status, this::toggleMonitor));
                 },
                 () -> { /* nothing */ }
         );
