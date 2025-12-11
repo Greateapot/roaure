@@ -18,4 +18,15 @@
     <string name="nav_graph_monitor_conf_fragment_label">Monitor Conf</string>
     <string name="nav_graph_router_conf_fragment_label">Router Conf</string>
     <string name="nav_graph_schedule_fragment_label">Schedule</string>
+    <string name="text_input_hint_host">Host</string>
+    <string name="text_input_hint_port">Port</string>
+    <string name="reset">Reset</string>
+    <string name="save">Save</string>
+    <string name="text_input_hint_username">Username</string>
+    <string name="text_input_hint_password">Password</string>
+    <string name="poll_interval">Poll interval</string>
+    <string name="text_input_hint_download_threshold">Download threshold</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="text_input_hint_bad_count_limit">Bad count limit</string>
 </resources>
