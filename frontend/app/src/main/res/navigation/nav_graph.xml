@@ -30,8 +30,13 @@
         android:label="@string/nav_graph_router_conf_fragment_label"
         tools:layout="@layout/fragment_router_conf" />
     <fragment
-        android:id="@+id/schedule_fragment"
+        android:id="@+id/schedules_fragment"
         android:name="re.greateapot.roaure.ui.schedules.SchedulesFragment"
-        android:label="@string/nav_graph_schedule_fragment_label"
+        android:label="@string/nav_graph_schedules_fragment_label"
         tools:layout="@layout/fragment_schedules" />
+    <fragment
+        android:id="@+id/schedule_fragment"
+        android:name="re.greateapot.roaure.ui.schedule.ScheduleFragment"
+        android:label="@string/nav_graph_schedule_fragment_label"
+        tools:layout="@layout/fragment_schedule" />
 </navigation>

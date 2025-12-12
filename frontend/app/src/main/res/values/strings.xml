@@ -17,7 +17,8 @@
     <string name="nav_graph_iperf_server_conf_fragment_label">IPERF-Server Conf</string>
     <string name="nav_graph_monitor_conf_fragment_label">Monitor Conf</string>
     <string name="nav_graph_router_conf_fragment_label">Router Conf</string>
-    <string name="nav_graph_schedule_fragment_label">Schedules</string>
+    <string name="nav_graph_schedules_fragment_label">Schedules</string>
+    <string name="nav_graph_schedule_fragment_label">Schedule</string>
     <string name="text_input_hint_host">Host</string>
     <string name="text_input_hint_port">Port</string>
     <string name="reset">Reset</string>
@@ -29,4 +30,23 @@
     <string name="hours">Hours</string>
     <string name="minutes">Minutes</string>
     <string name="text_input_hint_bad_count_limit">Bad count limit</string>
+    <string name="starts_at">Starts At</string>
+    <string name="ends_at">Ends At</string>
+    <string name="weekdays">Weekdays</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="schedule_enabled">Enabled</string>
+    <string name="schedule_disabled">Disabled</string>
+    <string name="title">Title</string>
+    <string name="add_new_schedule">Add new schedule</string>
+    <string name="refresh">Refresh</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>
