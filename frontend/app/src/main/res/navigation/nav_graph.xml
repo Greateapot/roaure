@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_router_conf" />
     <fragment
         android:id="@+id/schedule_fragment"
-        android:name="re.greateapot.roaure.ui.schedule.ScheduleFragment"
+        android:name="re.greateapot.roaure.ui.schedules.SchedulesFragment"
         android:label="@string/nav_graph_schedule_fragment_label"
-        tools:layout="@layout/fragment_schedule" />
+        tools:layout="@layout/fragment_schedules" />
 </navigation>
