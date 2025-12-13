@@ -111,7 +111,6 @@ public class MetricsFragment extends Fragment {
         });
 
         mViewModel.getStatusValue().observe(getViewLifecycleOwner(), value -> {
-            // TODO: code mapper (unavailable, deadline_exceeded & etc -> err occurred; other -> desc)
             String message = value.status.getCode().toString();
             Snackbar
                     .make(view, message, Snackbar.LENGTH_INDEFINITE)

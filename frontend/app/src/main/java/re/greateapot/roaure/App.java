@@ -9,7 +9,10 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // TODO: load host & port from prefs (with defaults: host: "orangepi3", port: 50052)
-        RoaureServiceClient.init("192.168.10.151", 50052);
+        var prefs = getSharedPreferences("conf", MODE_PRIVATE);
+        var host = prefs.getString(getResources().getString(R.string.backend_host), getResources().getString(R.string.backend_host_default));
+        var port = prefs.getInt(getResources().getString(R.string.backend_port), getResources().getInteger(R.integer.backend_port_default));
+
+        RoaureServiceClient.init(host, port);
     }
 }

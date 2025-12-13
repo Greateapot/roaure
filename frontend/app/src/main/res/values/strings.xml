@@ -49,4 +49,7 @@
     <string name="refresh">Refresh</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="backend_host">backend_host</string>
+    <string name="backend_host_default">orangepi3</string>
+    <string name="backend_port">backend_port</string>
 </resources>

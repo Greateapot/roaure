@@ -121,7 +121,6 @@ public class ScheduleFragment extends Fragment {
                         .findNavController(activity, R.id.nav_host_fragment_content_main)
                         .navigateUp();
             } else {
-                // TODO: code mapper (unavailable, deadline_exceeded & etc -> err occurred; other -> desc)
                 String message = value.status.getCode().toString();
                 Snackbar
                         .make(view, message, Snackbar.LENGTH_INDEFINITE)
