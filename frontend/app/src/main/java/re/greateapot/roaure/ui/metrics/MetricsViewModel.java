@@ -5,17 +5,18 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import re.greateapot.roaure.api.RoaureServiceClient;
+import re.greateapot.roaure.models.DataSize;
 import re.greateapot.roaure.models.StatusWithCallback;
 
 public class MetricsViewModel extends ViewModel {
 
-    private final MutableLiveData<Double> downloadSpeedValue = new MutableLiveData<>();
+    private final MutableLiveData<DataSize> downloadSpeedValue = new MutableLiveData<>();
     private final MutableLiveData<Integer> badCountValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> rebootRequiredValue = new MutableLiveData<>();
     private final MutableLiveData<Boolean> monitorRunningValue = new MutableLiveData<>();
     private final MutableLiveData<StatusWithCallback> statusValue = new MutableLiveData<>();
 
-    public LiveData<Double> getDownloadSpeedValue() {
+    public LiveData<DataSize> getDownloadSpeedValue() {
         return downloadSpeedValue;
     }
 
@@ -44,7 +45,7 @@ public class MetricsViewModel extends ViewModel {
         RoaureServiceClient.getInstance().getMetrics(
                 10,
                 metric -> {
-                    downloadSpeedValue.postValue(metric.getDownloadSpeed());
+                    downloadSpeedValue.postValue(new DataSize(metric.getDownloadSpeed()));
                     badCountValue.postValue(metric.getBadCount());
                     rebootRequiredValue.postValue(metric.getRebootRequired());
                     monitorRunningValue.postValue(metric.getMonitorRunning());

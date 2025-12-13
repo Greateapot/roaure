@@ -44,7 +44,7 @@ public class MetricsFragment extends Fragment {
 
             Navigation
                     .findNavController(activity, R.id.nav_host_fragment_content_main)
-                    .navigate(R.id.schedule_fragment);
+                    .navigate(R.id.schedules_fragment);
         });
 
         mViewModel.getDownloadSpeedValue().observe(getViewLifecycleOwner(), value -> {
@@ -56,8 +56,7 @@ public class MetricsFragment extends Fragment {
                 if (value == null) {
                     tv.setText(R.string.no_value_present);
                 } else {
-                    // TODO: RW
-                    tv.setText(String.format(Locale.getDefault(), "%.2f", value / 1024 / 1024));
+                    tv.setText(String.format(Locale.getDefault(), "%s", value));
                 }
             });
         });
@@ -84,9 +83,10 @@ public class MetricsFragment extends Fragment {
                 TextView tv = view.findViewById(R.id.reboot_required_text_view);
                 if (value == null) {
                     tv.setText(R.string.no_value_present);
+                } else if (value) {
+                    tv.setText(R.string.yes);
                 } else {
-                    // TODO: RW
-                    tv.setText(value ? "YES" : "NO");
+                    tv.setText(R.string.no);
                 }
             });
         });
