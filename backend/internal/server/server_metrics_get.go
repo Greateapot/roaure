@@ -36,7 +36,7 @@ func (s *roaureServiceServer) GetMetrics(
 			BadCount:       uint32(s.monitor.BadCount),
 			MonitorRunning: s.monitor.Running,
 		}); err != nil {
-			if s, ok := status.FromError(err); !ok || s.Code() != codes.Canceled {
+			if s, ok := status.FromError(err); !ok || s.Code() != codes.Canceled || s.Code() != codes.Unavailable {
 				grpclog.Errorln(err)
 			}
 			return nil
