@@ -73,4 +73,16 @@ public class MetricsViewModel extends ViewModel {
                 () -> { /* nothing */ }
         );
     }
+
+    public void reboot() {
+        RoaureServiceClient.getInstance().reboot(
+                e -> {
+                    statusValue.postValue(null);
+                },
+                status -> {
+                    statusValue.postValue(new StatusWithCallback(status, this::toggleMonitor));
+                },
+                () -> { /* nothing */ }
+        );
+    }
 }

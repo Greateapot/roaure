@@ -38,6 +38,7 @@ public class MetricsFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(MetricsViewModel.class);
 
         view.findViewById(R.id.toggle_monitor_button).setOnClickListener(view1 -> mViewModel.toggleMonitor());
+        view.findViewById(R.id.reboot_button).setOnClickListener(view1 -> mViewModel.reboot());
         view.findViewById(R.id.go_to_schedule_button).setOnClickListener(view1 -> {
             FragmentActivity activity = getActivity();
             if (activity == null) return;
@@ -111,11 +112,17 @@ public class MetricsFragment extends Fragment {
         });
 
         mViewModel.getStatusValue().observe(getViewLifecycleOwner(), value -> {
-            String message = value.status.getCode().toString();
-            Snackbar
-                    .make(view, message, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Retry", view2 -> value.callback.retry())
-                    .show();
+            if (value == null) {
+                Snackbar
+                        .make(view, "Success!", Snackbar.LENGTH_LONG)
+                        .show();
+            } else {
+                String message = value.status.getCode().toString();
+                Snackbar
+                        .make(view, message, Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Retry", view2 -> value.callback.retry())
+                        .show();
+            }
         });
 
         // Start polling

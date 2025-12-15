@@ -52,4 +52,5 @@
     <string name="backend_host">backend_host</string>
     <string name="backend_host_default">orangepi3</string>
     <string name="backend_port">backend_port</string>
+    <string name="reboot">Reboot</string>
 </resources>
