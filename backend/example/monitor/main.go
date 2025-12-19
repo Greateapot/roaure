@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Greateapot/roaure/internal/database"
+	"github.com/Greateapot/roaure/internal/led"
 	"github.com/Greateapot/roaure/internal/monitor"
 	"github.com/Greateapot/roaure/internal/router"
 	"github.com/Greateapot/roaure/internal/speedtest"
@@ -26,6 +27,8 @@ func main() {
 			Port: 5201,
 		},
 	)
+
+	led, _ := led.NewLED("/dev/gpiochip0", 7)
 
 	m := monitor.NewMonitor(
 		context.Background(),
@@ -49,6 +52,7 @@ func main() {
 		},
 		rc,
 		sc,
+		led,
 	)
 
 	m.Start()

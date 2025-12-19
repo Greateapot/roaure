@@ -15,6 +15,7 @@ require (
 	github.com/BGrewell/tail v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
+	github.com/warthog618/go-gpiocdev v0.9.1
 	golang.org/x/net v0.44.0 // indirect
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect

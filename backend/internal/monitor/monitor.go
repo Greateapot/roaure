@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Greateapot/roaure/internal/database"
+	"github.com/Greateapot/roaure/internal/led"
 	"github.com/Greateapot/roaure/internal/router"
 	"github.com/Greateapot/roaure/internal/speedtest"
 )
@@ -16,6 +17,7 @@ type Monitor struct {
 
 	RouterClient    *router.Client
 	SpeedtestClient *speedtest.Client
+	LED             *led.LED
 
 	DownloadSpeed  database.DataSize
 	BadCount       uint8
@@ -31,11 +33,13 @@ func NewMonitor(
 	monitorConf *database.MonitorConf,
 	routerClient *router.Client,
 	speedtestClient *speedtest.Client,
+	led *led.LED,
 ) *Monitor {
 	m := Monitor{
 		MonitorConf:     monitorConf,
 		RouterClient:    routerClient,
 		SpeedtestClient: speedtestClient,
+		LED:             led,
 		ctx:             ctx,
 	}
 
@@ -130,7 +134,15 @@ func (m *Monitor) wrapper(ctx context.Context) {
 		case <-ticker.C:
 			// Замеряем скорость, если нужно и можно - перезагружаем роутер
 			if m.canReboot() {
+				if !m.LED.Enabled {
+					m.LED.On()
+				}
+
 				m.Reboot()
+			}
+
+			if m.LED.Enabled {
+				m.LED.Off()
 			}
 		}
 	}

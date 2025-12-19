@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/Greateapot/roaure/internal/database"
@@ -21,6 +22,13 @@ func main() {
 	configPath := os.Getenv("CONFIG_PATH")
 	network := os.Getenv("SERVER_NETWORK")
 	address := os.Getenv("SERVER_ADDRESS")
+	ledChip := os.Getenv("LED_CHIP")
+	rawLedlineOffset := os.Getenv("LED_LINE_OFFSET")
+
+	ledLineOffset, err := strconv.ParseInt(rawLedlineOffset, 10, 64)
+	if err != nil {
+		grpclog.Fatal(err)
+	}
 
 	lis, err := net.Listen(network, address)
 	if err != nil {
@@ -30,7 +38,7 @@ func main() {
 	database := database.NewDatabase(configPath)
 
 	s := grpc.NewServer()
-	roaurev1.RegisterRoaureServiceServer(s, server.NewRoaureServiceServer(ctx, database))
+	roaurev1.RegisterRoaureServiceServer(s, server.NewRoaureServiceServer(ctx, database, ledChip, int(ledLineOffset)))
 	reflection.Register(s)
 
 	// Красивая остановка по сигналу
